@@ -1,0 +1,5 @@
+rootProject.name = 'coupon'
+include 'coupon-api'
+include 'coupon-domain'
+include 'coupon-batch'
+

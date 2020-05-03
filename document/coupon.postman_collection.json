@@ -1,0 +1,159 @@
+{
+	"variables": [],
+	"info": {
+		"name": "coupon",
+		"_postman_id": "6c36542b-230b-0aa3-45ec-401fe898a938",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "쿠폰지급",
+			"request": {
+				"url": "http://localhost:9090/coupons/assign/1",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "지급된쿠폰내역조회",
+			"request": {
+				"url": "http://localhost:9090/coupons/search",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userSeq\":1,\n\t\"size\":4,\n\t\"page\":1\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "쿠폰사용",
+			"request": {
+				"url": "http://localhost:9090/coupons/using",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userSeq\":1,\n\t\"coupon\":\"DBKTPB-137955-CBIJJP\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "쿠폰생성",
+			"request": {
+				"url": {
+					"raw": "http://localhost:9090/coupons/create?count=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"coupons",
+						"create"
+					],
+					"query": [
+						{
+							"key": "count",
+							"value": "10",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "만료된쿠폰조회",
+			"request": {
+				"url": "http://localhost:9090/coupons/expired",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUB0ZXN0LmNvbSIsImlhdCI6MTU4NjE5MjcyNywiZXhwIjoxNTg2MTk0NTI3fQ.Kg6La0Hdt2AnjQml6Y2NLgwPjCuTEnhRJSKCKtgXMEpNThfB5loi_ocC0nEm8aLIo3Qc3e0m7I0TR1x6YNHzcw",
+						"description": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userSeq\":1,\n\t\"page\":1,\n\t\"size\":3\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "쿠폰취소",
+			"request": {
+				"url": "http://localhost:9090/coupons/cancel",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userSeq\":1,\n\t\"coupon\":\"YIUCBO-926914-ADMHUB\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "당일만료된쿠폰",
+			"request": {
+				"url": "http://localhost:9090/coupons/expired",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userSeq\":1,\n\t\"page\":1,\n\t\"size\":3\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
