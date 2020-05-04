@@ -21,7 +21,7 @@
 
 2. 빌드 (project root)
 <pre>
-./gradlew clean build -Pprofile=develop
+./gradlew clean build -Pprofile=develop -x test
 </pre> 
 
 3. 프로젝트 실행

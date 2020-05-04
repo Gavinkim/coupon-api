@@ -60,7 +60,7 @@ public class CouponControllerTest {
         given(couponService.generateCoupon(count))
                 .willReturn(count);
         mvc.perform(get("/coupons/create")
-                //.header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + token)
                 .param("count", String.valueOf(count))
         ).andExpect(status().isCreated());
 
