@@ -1,6 +1,5 @@
 package com.gavinkim.type;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,8 @@ public enum ResponseType {
     ,USER_NOTFOUND("C4002","사용자를 찾을 수 없습니다.")
     ,ALREADY("C4003","중복 요청 되었습니다.")
     ,NOT_AVAILABLE("C4004","사용 가능한 쿠폰이 존재 하지 않습니다")
-    ,VALIDATION("C405","validation fail");
+    ,VALIDATION("C405","validation fail")
+    ,SIGN_IN("C4006","login error");
 
     private String code;
     @Setter

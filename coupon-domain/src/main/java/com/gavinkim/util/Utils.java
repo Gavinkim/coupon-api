@@ -27,6 +27,10 @@ public class Utils extends ObjectUtils {
                 RandomStringUtils.randomAlphanumeric(6)).toUpperCase();
     }
 
+    public static String randomCode(){
+        return String.format("%s",RandomStringUtils.randomAlphanumeric(6)).toUpperCase();
+    }
+
     public static String toJson(Object from) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

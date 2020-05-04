@@ -22,7 +22,11 @@ create table IF NOT EXISTS `user`
     is_deleted bit          not null,
     password   varchar(255) not null,
     username   varchar(30)  not null,
-    constraint UK_USER_IDX_01 unique (username)
+    email      varchar(50)  not null,
+    status     varchar(50)  not null,
+    temp_code  varchar(50)  not null,
+    constraint UK_USER_IDX_01 unique (username),
+    constraint UK_USER_IDX_02 unique (email)
 );
 INSERT INTO user (user_seq,created_at, updated_at, is_deleted, password, username) VALUES (1,'2020-05-03 03:42:42', '2020-05-03 03:42:44', false, 'password', 'test1')
 INSERT INTO user (user_seq,created_at, updated_at, is_deleted, password, username) VALUES (2,'2020-05-03 03:42:42', '2020-05-03 03:42:44', false, 'password', 'test2')

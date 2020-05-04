@@ -1,5 +1,6 @@
 package com.gavinkim.controller;
 
+import com.gavinkim.controller.coupon.CouponController;
 import com.gavinkim.dto.*;
 import com.gavinkim.model.coupon.CouponService;
 import com.gavinkim.type.CouponStatus;

@@ -1,5 +1,6 @@
 package com.gavinkim.controller;
 
+import com.gavinkim.controller.user.UserController;
 import com.gavinkim.model.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,9 +40,7 @@ public class UserControllerTest {
     @Test
     public void checkUsername() throws Exception {
         String username = "gavin";
-        given(userService.checkUniqueUsername(username))
-                .willReturn(true);
-        mvc.perform(get("/users/validation")
+        mvc.perform(get("/users/username/validation")
                 .param("username", username)
         ).andExpect(status().isOk());
 

@@ -1,9 +1,15 @@
 package com.gavinkim.model.user;
 
+import com.gavinkim.dto.SignInRequestDto;
+import com.gavinkim.dto.SignInResponseDto;
+import com.gavinkim.dto.SignUpRequestDto;
 import com.gavinkim.model.ValidationException;
 import com.gavinkim.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,4 +38,36 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException(String.format("[ %s ] 은 사용할 수 없습니다.",username));
         }
     }
+
+    @Override
+    public void checkUniqueEmail(String email) {
+        if(userRepository.findByEmail(email.trim()) > 0){
+            throw new ValidationException(String.format("[ %s ] 은 사용할 수 없습니다.",email));
+        }
+    }
+
+    @Transactional
+    @Override
+    public void signUp(SignUpRequestDto signUpRequestDto) {
+        User user = userRepository.save(new User(signUpRequestDto));
+        //todo: tempCode 와 이메일 발송
+    }
+
+    @Override
+    public User signIn(SignInRequestDto signInRequestDto) {
+        User user = findByUsername(signInRequestDto.getUsername())
+                .orElseThrow(()->new SignInException("잘못된 아이디 혹은 패스워드 입니다."));
+        if(Utils.nullSafeNotEquals(user.getPassword(),signInRequestDto.getPassword())){
+            throw new SignInException("잘못된 아이디 혹은 패스워드 입니다.");
+        }
+        //todo: user 의 status 확인
+        return user;
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
 }

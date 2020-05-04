@@ -1,4 +1,4 @@
-package com.gavinkim.controller;
+package com.gavinkim.controller.coupon;
 
 import com.gavinkim.dto.*;
 import com.gavinkim.model.coupon.CouponService;

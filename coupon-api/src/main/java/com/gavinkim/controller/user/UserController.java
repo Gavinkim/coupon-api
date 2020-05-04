@@ -1,9 +1,6 @@
-package com.gavinkim.controller;
+package com.gavinkim.controller.user;
 
-import com.gavinkim.dto.CouponDto;
-import com.gavinkim.dto.ResponseDto;
-import com.gavinkim.dto.SignInResponseDto;
-import com.gavinkim.dto.SignUpRequestDto;
+import com.gavinkim.dto.*;
 import com.gavinkim.model.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,40 +22,51 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final SignInResource signInResource;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          SignInResource signInResource) {
         this.userService = userService;
+        this.signInResource = signInResource;
     }
 
     @ApiOperation(value = "signup", nickname = "signup",notes = "회원가입")
     @ApiResponses({@ApiResponse(code=200,message = "success",response = CouponDto.class)})
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto){
-
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto){
+        userService.signUp(signUpRequestDto);
         return new ResponseEntity<>(ResponseDto.success(),HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "signin", nickname = "signin",notes = "로그인")
     @ApiResponses({@ApiResponse(code=200,message = "success",response = SignInResponseDto.class)})
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@Valid @RequestBody SignUpRequestDto signUpRequestDto){
-        return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
+    public ResponseEntity<?> signin(@Valid @RequestBody SignInRequestDto signInRequestDto){
+        return new ResponseEntity<>(ResponseDto.success(signInResource.signin(signInRequestDto)),HttpStatus.OK);
     }
-
-//    @ApiOperation(value = "validation_username", nickname = "validation_username",notes = "validation_username")
-//    @ApiResponses({@ApiResponse(code=200,message = "success",response = SignInResponseDto.class)})
-//    @GetMapping("/validation/{username:[a-zA-Z0-9]{4,30}}")
-//    public ResponseEntity<?> validationUsername(@PathVariable("username") String username) {
-//        log.info("USER: {}",username);
-//        return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
-//    }
 
     @ApiOperation(value = "validation_username", nickname = "validation_username",notes = "validation_username")
     @ApiResponses({@ApiResponse(code=200,message = "success",response = ResponseDto.class)})
-    @GetMapping("/validation")
+    @GetMapping("/username/validation")
     public ResponseEntity<?> checkUsername(@RequestParam(name = "username") String username){
         userService.checkUniqueUsername(username);
+        return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "validation_email", nickname = "validation_email",notes = "validation_email")
+    @ApiResponses({@ApiResponse(code=200,message = "success",response = ResponseDto.class)})
+    @GetMapping("/email/validation")
+    public ResponseEntity<?> checkEmail(@RequestParam(name = "email") String email){
+        userService.checkUniqueEmail(email);
+        return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "confirm_email", nickname = "confirm_email",notes = "confirm_email")
+    @ApiResponses({@ApiResponse(code=200,message = "success",response = ResponseDto.class)})
+    @GetMapping("/email/confirm")
+    public ResponseEntity<?> confirmEmail(@RequestParam(name = "email") String email,@RequestParam(name = "code") String code){
+        userService.checkUniqueEmail(email);
         return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
     }
 
