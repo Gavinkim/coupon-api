@@ -64,6 +64,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ResponseDto.error(ResponseType.SIGN_IN), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<?> TokenException(TokenException e){
+        log.error("[!] {}",e.getMessage());
+        return new ResponseEntity<>(ResponseDto.error(ResponseType.INVALID_TOKEN), HttpStatus.BAD_REQUEST);
+    }
+
     //dto validator,dto's each field must has messages
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

@@ -6,12 +6,16 @@ import com.gavinkim.dto.SignInResponseDto;
 import com.gavinkim.model.user.User;
 import com.gavinkim.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 public class SignInResource {
+
+    @Value("${jwt.token.expiredhours}")
+    private int expiredHours;
 
     private final JwtTokenHelper jwtTokenHelper;
     private final UserService userService;
@@ -23,12 +27,12 @@ public class SignInResource {
         this.userService = userService;
     }
 
-    SignInResponseDto signin(SignInRequestDto signInRequestDto){
+    public SignInResponseDto signin(SignInRequestDto signInRequestDto){
         User user = userService.signIn(signInRequestDto);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiredAt = LocalDateTime.now().plusHours(expiredHours);
         return SignInResponseDto.builder()
-                .token(jwtTokenHelper.generateToken(user.getEmail(), now))
-                .expiredAt(now.plusHours(3))
+                .token(jwtTokenHelper.generateToken(user.getEmail(), expiredAt))
+                .expiredAt(expiredAt)
                 .build();
     }
 

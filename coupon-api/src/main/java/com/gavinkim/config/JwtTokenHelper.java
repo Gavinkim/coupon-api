@@ -15,6 +15,8 @@ import java.util.Date;
 @Component
 public class JwtTokenHelper {
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+    private final String HEADER = "Authorization";
+    private final String HEADER_VALUE_PREFIX = "Bearer ";
     @Value("${jwt.token.secret}")
     private String tokenSecret;
 
@@ -35,20 +37,24 @@ public class JwtTokenHelper {
             }
         } catch (SignatureException ex) {
             log.error("Invalid JWT signature");
+            throw new TokenException("Invalid Token");
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token");
+            throw new TokenException("Invalid Token");
         } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
+            throw new TokenException("Invalid Token");
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty.");
+            throw new TokenException("Invalid Token");
         }
         return false;
     }
     public String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        String bearerToken = request.getHeader(HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_VALUE_PREFIX)) {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;

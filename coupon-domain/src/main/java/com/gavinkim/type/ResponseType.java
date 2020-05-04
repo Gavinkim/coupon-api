@@ -12,7 +12,8 @@ public enum ResponseType {
     ,ALREADY("C4003","중복 요청 되었습니다.")
     ,NOT_AVAILABLE("C4004","사용 가능한 쿠폰이 존재 하지 않습니다")
     ,VALIDATION("C405","validation fail")
-    ,SIGN_IN("C4006","login error");
+    ,SIGN_IN("C4006","login error")
+    ,INVALID_TOKEN("C4007","Invalid token");
 
     private String code;
     @Setter

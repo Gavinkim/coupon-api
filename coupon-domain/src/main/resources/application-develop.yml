@@ -40,3 +40,4 @@ logging:
 jwt:
   token:
     secret: wokaa^*saowek
+    expiredhours: 3

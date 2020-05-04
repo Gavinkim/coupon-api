@@ -1,9 +1,8 @@
-
 server:
   port: 9090
 spring:
   profiles:
-    active: product
+    active: develop
   batch:
     job:
       names: ${job.name:NONE}
@@ -24,7 +23,6 @@ spring:
         descriptor:
           sql: true
       show-sql: true
-
 logging:
   config: classpath:logback.xml
   pattern:
@@ -42,3 +40,4 @@ logging:
 jwt:
   token:
     secret: wokaa^*saowek
+    expiredhours: 3 
