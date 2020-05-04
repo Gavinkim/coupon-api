@@ -1,5 +1,6 @@
 rootProject.name = 'coupon'
 include 'coupon-api'
-include 'coupon-domain'
+include 'coupon-common'
 include 'coupon-batch'
+include 'coupon-admin'
 

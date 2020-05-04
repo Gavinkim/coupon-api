@@ -1,6 +1,5 @@
 package com.gavinkim.batch.jobs;
 
-import com.gavinkim.batch.config.JobParametersTargetDateValidator;
 import com.gavinkim.batch.config.JobRunIdIncrementer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

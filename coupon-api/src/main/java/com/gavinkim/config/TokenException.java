@@ -1,7 +1,0 @@
-package com.gavinkim.config;
-
-public class TokenException extends RuntimeException {
-    public TokenException(String message) {
-        super(message);
-    }
-}

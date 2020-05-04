@@ -1,13 +1,18 @@
 package com.gavinkim.controller;
 
+import com.gavinkim.config.TokenAuthenticationEntryPoint;
+import com.gavinkim.config.TokenAuthenticationFilter;
 import com.gavinkim.controller.coupon.CouponController;
 import com.gavinkim.dto.*;
 import com.gavinkim.model.coupon.CouponService;
+import com.gavinkim.security.CustomUserDetailsService;
+import com.gavinkim.security.TokenProvider;
 import com.gavinkim.type.CouponStatus;
 import com.gavinkim.util.Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -26,16 +31,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @ActiveProfiles("develop")
 @RunWith(SpringRunner.class)
 @WebMvcTest(CouponController.class)
 public class CouponControllerTest {
-
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private CouponService couponService;
+    @MockBean
+    private CustomUserDetailsService customUserDetailsService;
+    @MockBean
+    private TokenAuthenticationEntryPoint tokenAuthenticationEntryPoint;
+
+    @MockBean
+    private TokenAuthenticationFilter tokenAuthenticationFilter;
+
+    @MockBean
+    private TokenProvider tokenProvider;
+
+    private String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NEB0ZXN0LmNvbSIsImlhdCI6MTU4ODYyMjc4NiwiZXhwIjoxNTg4NjMzNTg2fQ.qLjKH3vbwpgjOSCEwoVMJbONezqtVBoOHOFRFxf_baOfJv-rRu8rNiqzQQkZ7rlXB-wkyxslGIsoqXFSmzkLBA";
 
     @Test
     public void create() throws Exception {
@@ -43,6 +60,7 @@ public class CouponControllerTest {
         given(couponService.generateCoupon(count))
                 .willReturn(count);
         mvc.perform(get("/coupons/create")
+                //.header("Authorization", "Bearer " + token)
                 .param("count", String.valueOf(count))
         ).andExpect(status().isCreated());
 
@@ -51,10 +69,12 @@ public class CouponControllerTest {
 
     @Test
     public void assignCoupon() throws Exception{
+
         String mockCoupon = "test-coupon-124";
         given(couponService.assignCoupon(anyLong()))
                 .willReturn(mockCoupon);
         mvc.perform(post("/coupons/assign/1")
+                //.header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
         verify(couponService).assignCoupon(1);
     }
