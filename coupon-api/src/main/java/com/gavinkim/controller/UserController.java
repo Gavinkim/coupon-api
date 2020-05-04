@@ -58,7 +58,8 @@ public class UserController {
     @ApiResponses({@ApiResponse(code=200,message = "success",response = ResponseDto.class)})
     @GetMapping("/validation")
     public ResponseEntity<?> checkUsername(@RequestParam(name = "username") String username){
-        return new ResponseEntity<>(ResponseDto.success(userService.checkUniqueUsername(username)),HttpStatus.OK);
+        userService.checkUniqueUsername(username);
+        return new ResponseEntity<>(ResponseDto.success(),HttpStatus.OK);
     }
 
 }

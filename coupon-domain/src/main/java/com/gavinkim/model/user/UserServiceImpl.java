@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final int USERNAME_LENGTH_MIN = 4;
+    private final int USERNAME_LENGTH_MAX = 30;
     private final UserRepository userRepository;
 
     @Autowired
@@ -20,10 +22,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkUniqueUsername(String username) {
+    public void checkUniqueUsername(String username) {
+
         if(Utils.isEmpty(username.trim())){
-            throw new ValidationException("username 이 입력되지 않았습니다.");
+            throw new ValidationException("username 을 입력해주세요");
+        }else if(!Utils.checkBetween(username,USERNAME_LENGTH_MIN,USERNAME_LENGTH_MAX)){
+            throw new ValidationException("username 은 4 ~ 30자 사이여야 합니다.");
+        }else if(userRepository.countByUsername(username.trim()) > 0){
+            throw new ValidationException(String.format("[ %s ] 은 사용할 수 없습니다.",username));
         }
-        return userRepository.countByUsername(username.trim()) <=0;
     }
 }

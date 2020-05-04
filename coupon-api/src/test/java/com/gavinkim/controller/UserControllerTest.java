@@ -1,6 +1,5 @@
 package com.gavinkim.controller;
 
-import com.gavinkim.model.ValidationException;
 import com.gavinkim.model.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

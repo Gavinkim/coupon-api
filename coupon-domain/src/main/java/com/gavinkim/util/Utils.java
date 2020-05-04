@@ -46,4 +46,13 @@ public class Utils extends ObjectUtils {
         }
     }
 
+    public static boolean checkBetween(String src,int min, int max){
+        if(isEmpty(src.trim())){
+            return false;
+        }else if(max < min){
+            return false;
+        }
+        return src.length() >= min && src.length() <= max;
+    }
+
 }
