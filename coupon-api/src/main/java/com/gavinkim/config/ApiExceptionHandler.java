@@ -2,6 +2,7 @@ package com.gavinkim.config;
 
 import com.gavinkim.dto.ResponseDto;
 import com.gavinkim.model.AlreadyException;
+import com.gavinkim.model.ValidationException;
 import com.gavinkim.model.coupon.CouponNotFoundException;
 import com.gavinkim.model.coupon.NotAvailableCouponException;
 import com.gavinkim.model.user.UserNotFoundException;
@@ -38,6 +39,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> alreadyFoundException(AlreadyException e){
         log.error("[!] {}",e.getMessage());
         return new ResponseEntity<>(ResponseDto.error(ResponseType.ALREADY), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> validationException(ValidationException e){
+        log.error("[!] {}",e.getMessage());
+        ResponseType.VALIDATION.setMessage(e.getMessage());
+        return new ResponseEntity<>(ResponseDto.error(ResponseType.VALIDATION), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

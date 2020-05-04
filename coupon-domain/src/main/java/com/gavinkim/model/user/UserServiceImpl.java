@@ -1,5 +1,6 @@
 package com.gavinkim.model.user;
 
+import com.gavinkim.model.ValidationException;
 import com.gavinkim.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUniqueUsername(String username) {
-        return userRepository.countByUsername(username) <=0;
+        if(Utils.isEmpty(username.trim())){
+            throw new ValidationException("username 이 입력되지 않았습니다.");
+        }
+        return userRepository.countByUsername(username.trim()) <=0;
     }
 }
