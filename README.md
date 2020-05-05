@@ -21,7 +21,7 @@
 - application-develop.yml 의 DB 접속 정보 수정.(host / username / password)
 </pre>
 
-* Build (project root 경로에서 실)
+* Build (project root 경로에서 실행)
 <pre>
 -- include test code
 ./gradlew clean build -Pprofile=develop
