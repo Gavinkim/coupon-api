@@ -11,7 +11,7 @@
 </pre>
 
 ### Coupon api 구조
-> > ![Alt text](./document/coupon.jpg)
+> > ![Alt text](./document/coupon_v_01.jpg)
 ### Usage
 > (해당 프로젝트 실행을 위해서는 반드시 아래 DB 스키마가 필요합니다.)
 * DB 스키마 및 테이블 생성, 초기 데이터 생성. 
