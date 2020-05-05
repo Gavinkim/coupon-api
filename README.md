@@ -11,7 +11,7 @@
 </pre>
 
 ### Usage
-> (해당 프로젝트를 실행을 위해서는 반드시 아래 DB 스키마가 필요합니다.)
+> (해당 프로젝트 실행을 위해서는 반드시 아래 DB 스키마가 필요합니다.)
 * DB 스키마 및 테이블 생성, 초기 데이터 생성. 
 <pre>
 - coupon-common module 의 schema.sql 내용을 DB 콘솔에서 실행
@@ -47,9 +47,9 @@ java -jar coupon-batch/build/libs/coupon-batch-0.0.1-SNAPSHOT.jar --spring.profi
 > 쿠폰 사용 및 취소
 <pre>
 - 중복 취소 / 사용 불가능 하도록 하였습니다.
-- 쿠폰 사용 요청시에는 쿠폰의 상태가 Assign / canceled / 만료 날짜 전 상태 일 경우 가능 합니다 
-- 쿠폰 지급요청은 반드시 사용자 번호가 필요합니다.
-- 쿠폰 사용 / 취소 시에는 반드시 사용자 번호와 쿠폰 코드가 필요합니다. 
+- 쿠폰 사용 요청시 쿠폰의 상태가 ASSIGN / CANCELED 인 상태만 가능합니다. (또한 expiredAt 확인)   
+- 쿠폰 지급요청은 반드시 사용자 번호 (user_seq)가 필요합니다.
+- 쿠폰 사용 / 취소 시 반드시 사용자 번호(user_seq)와 coupon 코드가  필요합니다. 
 - 쿠폰 코드 형식은 다음과 같습니다.
 > > OYNED-01202-GW424 
 </pre>
@@ -57,14 +57,14 @@ java -jar coupon-batch/build/libs/coupon-batch-0.0.1-SNAPSHOT.jar --spring.profi
 > 쿠폰의 상태와 만료 쿠폰 알림 관리
 <pre>
 - 만료된 쿠폰의 상태 업데이트와, 만료 3일 전 쿠폰 알림은 배치로 진행.
-- 해당 배치는 daily 로 Jenkins 혹은 기타 third-party 에서 실행 한다고 가정.
+(해당 배치는 daily 로 Jenkins 혹은 기타 third-party 에서 실행 한다고 가정.)
 - 해당 배치는 만료된 쿠폰 상태 업데이트 와 만료 3일 전 쿠폰에 대해 Noti(콘솔출력) 하는 2 Step 으로 구성.
-- 쿠폰 서비스의 구성도와 api 컬렉션 정보는 해당 프로젝트의 document 폴더 참조.
+- 쿠폰 서비스의 구성도와 api 컬렉션 정보는 해당 프로젝트의 document 폴더 참조
 </pre>
 
 > 테스트 코드
 <pre>
-- api test 코드에서는 web scecurity 와 filter 등을 무시하도록 설정 하였습니다.
+- api test 실행시 web scecurity 와 filter 등을 무시하도록 설정 하였습니다.
 </pre>
 
 > 기타
