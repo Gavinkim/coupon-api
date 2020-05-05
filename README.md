@@ -66,7 +66,3 @@ java -jar coupon-batch/build/libs/coupon-batch-0.0.1-SNAPSHOT.jar --spring.profi
 <pre>
 - api test 실행시 web scecurity 와 filter 등을 무시하도록 설정 하였습니다.
 </pre>
-
-> 기타
-<pre>
-</pre>
