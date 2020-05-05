@@ -1,12 +1,8 @@
 package com.gavinkim.controller;
 
-import com.gavinkim.config.TokenAuthenticationEntryPoint;
-import com.gavinkim.config.TokenAuthenticationFilter;
 import com.gavinkim.controller.coupon.CouponController;
 import com.gavinkim.dto.*;
 import com.gavinkim.model.coupon.CouponService;
-import com.gavinkim.security.CustomUserDetailsService;
-import com.gavinkim.security.TokenProvider;
 import com.gavinkim.type.CouponStatus;
 import com.gavinkim.util.Utils;
 import org.junit.Test;
@@ -15,7 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,36 +32,34 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @ActiveProfiles("develop")
 @RunWith(SpringRunner.class)
 @WebMvcTest(CouponController.class)
+@Import(CouponController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CouponControllerTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private CouponService couponService;
-    @MockBean
-    private CustomUserDetailsService customUserDetailsService;
-    @MockBean
-    private TokenAuthenticationEntryPoint tokenAuthenticationEntryPoint;
 
-    @MockBean
-    private TokenAuthenticationFilter tokenAuthenticationFilter;
-
-    @MockBean
-    private TokenProvider tokenProvider;
-
-    private String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0NEB0ZXN0LmNvbSIsImlhdCI6MTU4ODYyMjc4NiwiZXhwIjoxNTg4NjMzNTg2fQ.qLjKH3vbwpgjOSCEwoVMJbONezqtVBoOHOFRFxf_baOfJv-rRu8rNiqzQQkZ7rlXB-wkyxslGIsoqXFSmzkLBA";
+    @Configuration
+    @EnableWebSecurity
+    static class SecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.csrf().disable().authorizeRequests().anyRequest().anonymous();
+        }
+    }
 
     @Test
-    public void create() throws Exception {
+    public void create() throws Exception{
         long count = 100000;
         given(couponService.generateCoupon(count))
                 .willReturn(count);
         mvc.perform(get("/coupons/create")
-                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
                 .param("count", String.valueOf(count))
         ).andExpect(status().isCreated());
 
@@ -68,18 +67,18 @@ public class CouponControllerTest {
     }
 
     @Test
-    public void assignCoupon() throws Exception{
+    public void assignCoupon() throws Exception {
 
         String mockCoupon = "test-coupon-124";
         given(couponService.assignCoupon(anyLong()))
                 .willReturn(mockCoupon);
         mvc.perform(post("/coupons/assign/1")
-                //.header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
         verify(couponService).assignCoupon(1);
     }
+
     @Test
-    public void searchUserCoupon() throws Exception{
+    public void searchUserCoupon() throws Exception {
         SearchDto mockSearchDto = SearchDto.builder()
                 .page(1)
                 .size(1)
@@ -108,7 +107,7 @@ public class CouponControllerTest {
     }
 
     @Test
-    public void usingCoupon() throws Exception{
+    public void usingCoupon() throws Exception {
         CouponDto mockCouponDto = CouponDto.builder()
                 .status(CouponStatus.USED)
                 .coupon("test")
@@ -126,7 +125,7 @@ public class CouponControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Utils.toJson(mockCouponRequestDto))
         ).andExpect(status().isOk());
-        verify(couponService,times(1)).manageCoupon(refEq(mockCouponRequestDto));
+        verify(couponService, times(1)).manageCoupon(refEq(mockCouponRequestDto));
     }
 
     @Test
@@ -148,11 +147,11 @@ public class CouponControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Utils.toJson(mockCouponRequestDto))
         ).andExpect(status().isOk());
-        verify(couponService,times(1)).manageCoupon(refEq(mockCouponRequestDto));
+        verify(couponService, times(1)).manageCoupon(refEq(mockCouponRequestDto));
     }
 
     @Test
-    public void expiredUserCoupon() throws Exception{
+    public void expiredUserCoupon() throws Exception {
         SearchDto mockSearchDto = SearchDto.builder()
                 .page(1)
                 .size(1)
@@ -175,6 +174,6 @@ public class CouponControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Utils.toJson(mockSearchDto))
         ).andExpect(status().isOk());
-        verify(couponService,times(1)).expiredUserCoupon(refEq(mockSearchDto));
+        verify(couponService, times(1)).expiredUserCoupon(refEq(mockSearchDto));
     }
 }
